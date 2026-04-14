@@ -1,6 +1,6 @@
 resource "aws_security_group" "tomcat_sg" {
   name        = "tomcat_security_group_http"
-  description = "Permitir SSH y HTTP para Tomcat"
+  description = "Permitir SSH y 8080 para Tomcat"
 
   ingress {
     from_port   = 8080
@@ -25,12 +25,13 @@ resource "aws_security_group" "tomcat_sg" {
 }
 
 resource "aws_instance" "TomcatServer" {
-  ami           = "ami-0c7217cdde317cfec" 
-  instance_type = "t2.small"
+  ami           = data.aws_ami.ubuntu.image_id
+  instance_type = var.instance_type
   vpc_security_group_ids = [aws_security_group.tomcat_sg.id]
-  key_name               = "DAWEB_Key"
+  key_name               = "vockey"
 
   user_data = file("${path.module}/scripts/install_tomcat.sh")
+  user_data_replace_on_change = true
 
   tags = {
     Name = "Tomcat-Server-HTTP"
