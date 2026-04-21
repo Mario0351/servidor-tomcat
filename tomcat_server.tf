@@ -1,12 +1,12 @@
 resource "aws_security_group" "tomcat_sg" {
-  name        = "tomcat_security_group_http"
+  name        = "tomcat_security_group_restricted"
   description = "Permitir SSH y 8080 para Tomcat"
 
   ingress {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    security_groups = [ aws_security_group.apache_sg.id ]
   }
 
   ingress {
