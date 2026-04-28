@@ -26,7 +26,7 @@ resource "aws_security_group" "apache_sg" {
 
 resource "aws_instance" "ApacheServer" {
   ami = data.aws_ami.ubuntu.image_id
-  instance_type = "t2.micro"
+  instance_type = var.instance_type
   vpc_security_group_ids = [aws_security_group.apache_sg.id]
   key_name = "vockey"
 
